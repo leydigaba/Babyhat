@@ -1,9 +1,9 @@
 # baby-chat
 Problemática general:
-Se observarón los problemas y situaciones que afronta una madre o padre durante el primer año de vida de su lactante ya sean padres con experiencia como padres primerizos, en la cuales se encuentran inquietudes en su desarrollo, enfermedades, cuidados y condiciones tanto físicas como psicológicas.
+Se observaron los problemas y situaciones que afronta una madre o padre durante el primer año de vida de su lactante ya sean padres con experiencia como padres primerizos, en la cuales se encuentran inquietudes en su desarrollo, enfermedades, cuidados y condiciones tanto físicas como psicológicas.
 
 Propuesta de solución:
-Desarrollar una plataforma en la cual las madres puedan acceder a un chat para consultar dudas, preguntas o consejos, donde una lA pueda brindar dichas respuestas con claridad para mejorar los cuidados y el desarrollo del recién nacido.
+Desarrollar una plataforma en la cual los padres puedan acceder a un chat para consultar dudas, preguntas o consejos, donde una lA pueda brindar dichas respuestas con claridad para mejorar los cuidados y el desarrollo del recién nacido.
 
 
 
