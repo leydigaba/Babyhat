@@ -14,7 +14,7 @@ Desarrollar una plataforma en la cual las madres puedan acceder a un chat para c
 | 3 | Padres | Editar padre | Actualiza los valores de un padre existente | Fácil | xxx |
 | 4 | Padres | Iniciar sesión | Verifica las credenciales en la tabla padres | Fácil | xxx |
 | 5 | Padres | Eliminar padre | Actualiza el estatus de un padre existente | Fácil | xxx |
-| 6 | Padres | Recuperar contraseña | Validar correo registrado para recuperar contraseña | xxx | xxx |
+| 6 | Padres | Recuperar contraseña | Validar correo registrado para recuperar contraseña | Media | xxx |
 | 7 | Padres | Agregar nuevo bebé | Inserta un nuevo bebé en la tabla bebes | Fácil | xxx |
 | 8 | Padres | Vizualizar bebé | Vizualizar la información del bebé | Fácil | xxx |
 | 9 | Padres | Editar bebé | Actualiza los valores de un bebé existente | Fácil | xxx |
@@ -32,7 +32,7 @@ Desarrollar una plataforma en la cual las madres puedan acceder a un chat para c
 | 21 | Padres | Eliminar peso del bebé | Elimina el peso de un bebé existente | Fácil | xxx |
 | 22 | Padres | Eliminar estatura del bebé | Elimina la estatura de un bebé existente | Fácil | xxx |
 | 23 | Padres | Eliminar IMC del bebé | Elimina el IMC de un bebé existente | Fácil | xxx |
-| 24 | Padres | Abrir nuevo chat | Inserta un chat al usuario en la tabla chats | Fácil | xxx |
+| 24 | Padres | Abrir nuevo chat | Limpiar vizualización e inserta un nuevo chat al padre en la tabla chats | Compleja | xxx |
 | 25 | Padres | Eliminar chat | Elimina el chat de un padre existente | Fácil | xxx |
 | 26 | Padres | Enviar pregunta | Inserta una pregunta y fecha al chat en la tabla mensajes | Fácil | xxx |
 | 27 | Padres | Editar pregunta | Actualiza la pregunta de un chat existente | Fácil | xxx |
@@ -56,8 +56,8 @@ Desarrollar una plataforma en la cual las madres puedan acceder a un chat para c
 | 45 | Administradores | Eliminar administrador | Actualiza el estatus de un administrador existente | Fácil | xxx |
 | 46 | Administradores | Prohibir acceso del padre | Actualiza el estatus de un padre existente | Fácil | xxx |
 | 47 | Administradores | Prohibir acceso del administrador | Actualiza el estatus de un administrador existente | Fácil | xxx |
-| 48 | Administradores | Recuperar contraseña del padre | Validar información registrada para recuperar contraseña | xxx | xxx |
-| 49 | Administradores | Recuperar contraseña del adminitrador | Validar información registrada para recuperar contraseña | xxx | xxx |
+| 48 | Administradores | Recuperar contraseña del padre | Validar información registrada para recuperar contraseña | Media | xxx |
+| 49 | Administradores | Recuperar contraseña del adminitrador | Validar información registrada para recuperar contraseña | Media | xxx |
 | 50 | Administradores | Agregar nuevo bebé | Inserta un nuevo bebé en la tabla bebes | Fácil | xxx |
 | 51 | Administradores | Vizualizar bebé | Vizualizar la información del bebé | Fácil | xxx |
 | 52 | Administradores | Vizualizar todos los bebés | Vizualizar los registros de la tabla bebes | Fácil | xxx |
@@ -76,7 +76,7 @@ Desarrollar una plataforma en la cual las madres puedan acceder a un chat para c
 | 65 | Administradores | Eliminar peso del bebé | Elimina el peso de un bebé existente | Fácil | xxx |
 | 66 | Administradores | Eliminar estatura del bebé | Elimina la estatura de un bebé existente | Fácil | xxx |
 | 67 | Administradores | Eliminar IMC del bebé | Elimina el IMC de un bebé existente | Fácil | xxx |
-| 68 | Administradores | Abrir nuevo chat | Inserta un chat al administrador en la tabla chats | Fácil | xxx |
+| 68 | Administradores | Abrir nuevo chat | Limpiar vizualización e inserta un nuevo chat al administrador en la tabla chats | Compleja | xxx |
 | 69 | Administradores | Eliminar chat | Elimina el chat de un administrador existente | Fácil | xxx |
 | 70 | Administradores | Enviar pregunta | Inserta una pregunta y fecha al chat en la tabla mensajes | Fácil | xxx |
 | 71 | Administradores | Editar pregunta | Actualiza la pregunta de un chat existente | Fácil | xxx |
@@ -88,4 +88,4 @@ Desarrollar una plataforma en la cual las madres puedan acceder a un chat para c
 | 77 | Administradores | Insertar nueva vacuna | Inserta una nueva vacuna en la tabla resgistro_vacunacion | Fácil | xxx |
 | 78 | Administradores | Editar vacuna | Actualiza la vacuna de un bebé existente | Fácil | xxx |
 | 79 | Administradores | Eliminar vacuna | Elimina la vacuna de un bebé existente | Fácil | xxx |
-| 80 | Todos | Cerrar sesión | Cierra la conexión a la base de datos | xxx | xxx |
+| 80 | Todos | Cerrar sesión | Cierra la conexión a la base de datos | Media | xxx |
