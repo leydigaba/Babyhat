@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro en BabyChat</title>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .Canva1 {
+            background-color: #F4F5F7;
+            width: 500px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header .title {
+            font-size: 30px;
+            text-align: center;
+            margin-left: 0;
+            margin-right: 30px; /* Espacio entre la imagen y el título */
+        }
+
+        .header .imagen {
+            margin-left: 30px;
+            width: 150px;
+            height: 150px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+            gap: 15px; /* Espacio entre columnas */
+        }
+
+        .form-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-item label {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .form-item input,
+        .form-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #ffffff56;
+        }
+
+        /* Campos que ocupan el ancho completo */
+        .form-item.full-width {
+            grid-column: span 2;
+        }
+
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 45%;
+            background-color: #515c6d;
+            padding: 8px;
+            color: #ffffff;
+            transition: transform 0.2s;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .volver {
+            width: 45%;
+            background-color: #515c6d;
+            padding: 8px;
+            color: #ffffff;
+            transition: transform 0.2s;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .volverrr {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        button:hover, .volver:hover {
+            transform: scale(1.05);
+        }
+
+        .cuenta {
+            margin-top: 20px;
+            font-size: 15px;
+            text-align: center;
+        }
+        .inicia {
+            margin-top: 20px;
+            font-size: 15px;
+            color: #515c6d;
+            text-align: center;
+            text-decoration: none;
+        }
+        .inicia:hover {
+            color: #8198bb;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="Canva1">
+            <div class="header">
+                <h1 class="header-title">Registra a tu bebé</h1>
+                <img src="babyChat.png" class="imagen">
+            </div>
+            <form action="registro_bebe.php" method="post" onsubmit="return validateForm()">
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label for="nombres">Nombres:</label>
+                        <input type="text" id="nombres" name="nombres" class="text" required>
+                    </div><br>
+                    
+                    <div class="form-item">
+                        <label for="primer_apellido">Primer apellido:</label>
+                        <input type="text" id="primer_apellido" name="primer_apellido" class="txt" placeholder="Opcional">
+                    </div>
+                    <div class="form-item">
+                        <label for="segundo_apellido">Segundo apellido:</label>
+                        <input type="text" id="segundo_apellido" name="segundo_apellido" class="txt" placeholder="Opcional">
+                    </div>
+                    
+                    <div class="form-item">
+                        <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="txt" required>
+                    </div>
+                    <div class="form-item">
+                        <label for="genero">Género:</label>
+                        <select id="genero" name="genero" class="txt" required>
+                            <option value="" disabled selected>Seleccione su género:</option>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label for="discapacidad">Discapacidad (opcional)</label>
+                        <input type="text" id="discapacidad" name="discapacidad">
+                    </div>
+        
+                    <div class="form-item">
+                        <label for="alergias">Alergias (opcional)</label>
+                        <input type="text" id="alergias" name="alergias">
+                    </div>
+        
+                    <div class="form-item">
+                        <label for="enfermedades">Enfermedades (opcional)</label>
+                        <input type="text" id="enfermedades" name="enfermedades">
+                    </div>
+        
+                    <div class="form-actions">
+                        <button type="button" class="cancel" onclick="closeModal()">Cancelar </button>
+                        <button type="submit" class="register">Registrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+            function loadProfilePicture(event) {
+                const image = document.getElementById('profileImage');
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }
+    
+            function closeModal() {
+            window.parent.postMessage('closeModal', '*');
+           }
+        </script>
+    </main>   
+</body>

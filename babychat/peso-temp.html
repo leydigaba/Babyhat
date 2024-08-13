@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peso de Ethan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .table-container h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .table-container .current-weight {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .table-container .current-weight span {
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .table-container .current-date {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .table-container .add-btn {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .table-container .add-btn-icon {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-container table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            color: #333;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .table-container .action-icons {
+            font-size: 18px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .table-container .delete-all-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .table-container .delete-all-btn:hover {
+            background-color: #c82333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 320px;
+        }
+
+        .form-container h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .form-container .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-container .close-btn:hover {
+            color: #000;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+        .form-container input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="table-container">
+        <h2>Peso</h2>
+        <div class="current-weight">ACTUAL: <span>4.5kg</span></div>
+        <div class="current-date">12/Julio/2024</div>
+        <a href="#" id="add-btn" class="add-btn">Agregar <span class="add-btn-icon">✎</span></a>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Peso</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="vaccine-table">
+                <tr>
+                    <td>4.5kg</td>
+                    <td>12/Julio/2024</td>
+                    <td>
+                        <span class="action-icons">✎</span>
+                        <span class="action-icons">🗑️</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4.2kg</td>
+                    <td>24/Marzo/2024</td>
+                    <td>
+                        <span class="action-icons">✎</span>
+                        <span class="action-icons">🗑️</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3.9kg</td>
+                    <td>05/Febrero/2024</td>
+                    <td>
+                        <span class="action-icons">✎</span>
+                        <span class="action-icons">🗑️</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="delete-all-btn">Eliminar todos los registros</button>
+    </div>
+
+    <div id="form-container" class="form-container hidden">
+        <button class="close-btn" id="close-btn">X</button>
+        <h3>Registro de Peso</h3>
+        <form id="vaccine-form">
+            <label for="weight">Peso:</label>
+            <input type="text" id="weight" name="weight" required>
+
+            <label for="date">Fecha:</label>
+            <input type="date" id="date" name="date" required>
+
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+
+    <script>
+        const addBtn = document.getElementById('add-btn');
+        const formContainer = document.getElementById('form-container');
+        const closeBtn = document.getElementById('close-btn');
+        const vaccineForm = document.getElementById('vaccine-form');
+        const vaccineTable = document.getElementById('vaccine-table');
+        const currentWeight = document.querySelector('.current-weight span');
+        const currentDate = document.querySelector('.current-date');
+
+        addBtn.addEventListener('click', () => {
+            formContainer.classList.remove('hidden');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            formContainer.classList.add('hidden');
+        });
+
+        vaccineForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const weight = document.getElementById('weight').value;
+            const date = document.getElementById('date').value;
+
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>${weight}</td>
+                <td>${date}</td>
+                <td>
+                    <span class="action-icons">✏️</span>
+                    <span class="action-icons">🗑️</span>
+                </td>
+            `;
+
+            vaccineTable.insertBefore(newRow, vaccineTable.firstChild);
+
+            currentWeight.textContent = weight;
+            currentDate.textContent = date;
+
+            formContainer.classList.add('hidden');
+            vaccineForm.reset();
+        });
+    </script>
+    
+</body>
+</html>

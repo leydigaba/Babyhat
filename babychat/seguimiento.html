@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Ethan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(odd) {
+            background-color: #fff;
+        }
+        .arrow {
+            text-align: center;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .arrow:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Seguimiento</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Fecha</th>
+                    <th>Valor</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Peso</td>
+                    <td>2024-08-07</td>
+                    <td>0 kg</td>
+                    <td class="arrow"><a href="peso.html" style="color: inherit; text-decoration: none;">→</a></td>
+                </tr>
+                <tr>
+                    <td>Estatura</td>
+                    <td>2024-08-07</td>
+                    <td></td>
+                    <td class="arrow"><a href="Estatura.html" style="color: inherit; text-decoration: none;">→</a></td>
+                </tr>
+                <tr>
+                    <td>IMC</td>
+                    <td>2024-08-07</td>
+                    <td>Ingresa el IMC</td>
+                    <td class="arrow"><a href="IMC.html" style="color: inherit; text-decoration: none;">→</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            Proporciona estos datos para mejorar la comprensión de BabyChat sobre las dudas acerca de tu bebé.
+        </div>
+        <button type="button" class="cancel" onclick="closeModal()">Cerrar</button>
+    </div>
+    <script>
+        function loadProfilePicture(event) {
+            const image = document.getElementById('profileImage');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+        function closeModal() {
+        window.parent.postMessage('closeModal', '*');
+       }
+    </script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMC de Ethan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+        }
+        .current {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .current span {
+            font-size: 1.5em;
+        }
+        .add-btn {
+            text-align: right;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .add-btn:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+        }
+        input[type="number"], input[type="date"], input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+        .modal-header, .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .no-records {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            font-size: 1.2em;
+        }
+        .actions button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IMC</h1>
+        <div class="current">
+            <span>ACTUAL: <strong id="currentIMC">18.5</strong></span>
+            <span id="currentFecha">12/Julio/2024</span>
+        </div>
+        <div class="add-btn" onclick="openModal()">Agregar ✎</div>
+        <div id="noRecordsMessage" class="no-records" style="display: none;">
+            Ingresa datos para mejorar la comprensión de BabyChat sobre las dudas acerca de tus bebés.
+        </div>
+        <table id="recordsTable">
+            <thead>
+                <tr>
+                    <th>IMC</th>
+                    <th>Fecha</th>
+                    <th class="actions">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="records">
+                <!-- Registros dinámicos -->
+            </tbody>
+        </table>
+        <div class="footer">
+            <button onclick="backToSeguimiento()">Volver</button>
+        </div>
+        <div class="footer">
+            <button onclick="clearAll()">Eliminar todos los registros</button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Registro</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div>
+                <label for="imc">IMC:</label>
+                <input type="number" id="imc" step="0.1" placeholder="Ingresa el IMC">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha">
+            </div>
+            <div class="modal-footer">
+                <button onclick="saveRecord()">Guardar</button>
+                <button onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let records = [
+            { imc: "18.5", fecha: "12/Julio/2024" },
+            { imc: "18.0", fecha: "24/Marzo/2024" },
+            { imc: "17.8", fecha: "05/Febrero/2024" }
+        ];
+
+        let editIndex = -1;
+
+        function openModal() {
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            resetForm();
+        }
+
+        function saveRecord() {
+            const imc = document.getElementById('imc').value;
+            const fecha = document.getElementById('fecha').value;
+
+            if (imc && fecha) {
+                if (editIndex > -1) {
+                    records[editIndex] = { imc, fecha };
+                    editIndex = -1;
+                } else {
+                    records.unshift({ imc, fecha });
+                }
+                updateTable();
+                updateCurrent();
+                closeModal();
+            } else {
+                alert('Por favor, ingresa el IMC y la fecha.');
+            }
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('records');
+            const noRecordsMessage = document.getElementById('noRecordsMessage');
+            tbody.innerHTML = '';
+            if (records.length === 0) {
+                noRecordsMessage.style.display = 'block';
+            } else {
+                noRecordsMessage.style.display = 'none';
+                records.forEach((record, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${record.imc}</td>
+                        <td>${record.fecha}</td>
+                        <td class="actions">
+                            <button onclick="editRecord(${index})">✎</button>
+                            <button onclick="deleteRecord(${index})">🗑️</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function updateCurrent() {
+            if (records.length > 0) {
+                const currentRecord = records[0];
+                document.getElementById('currentIMC').innerText = currentRecord.imc;
+                document.getElementById('currentFecha').innerText = currentRecord.fecha;
+            } else {
+                document.getElementById('currentIMC').innerText = 'N/A';
+                document.getElementById('currentFecha').innerText = 'N/A';
+            }
+        }
+
+        function deleteRecord(index) {
+            records.splice(index, 1);
+            updateTable();
+            updateCurrent();
+        }
+
+        function clearAll() {
+            records = [];
+            updateTable();
+            updateCurrent();
+        }
+
+        function editRecord(index) {
+            const record = records[index];
+            document.getElementById('imc').value = record.imc;
+            document.getElementById('fecha').value = record.fecha;
+            editIndex = index;
+            openModal();
+        }
+
+        function resetForm() {
+            document.getElementById('imc').value = '';
+            document.getElementById('fecha').value = '';
+        }
+
+        function backToSeguimiento() {
+            window.location.href = 'seguimiento.html';
+        }
+
+        updateTable();
+        updateCurrent();
+    </script>
+</body>
+</html>
