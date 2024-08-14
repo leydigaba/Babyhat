@@ -1,19 +1,32 @@
 <?php
-session_start();
-if ($_SESSION['role'] !== 'padre') {
-    header("Location: iniciar_sesion.html");
-    exit();
-}
+    session_start();
+    if ($_SESSION['role'] !== 'padre') {
+        header("Location: iniciar_sesion.html");
+        exit();
+    }
 
-require 'conexion.php'; // Asegúrate de que la conexión a la base de datos esté correcta.
+    require 'conexion.php'; // Asegúrate de que la conexión a la base de datos esté correcta.
 
-$email = $_SESSION['email'];
-$query = "SELECT * FROM bebes WHERE email = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $email);
-$stmt->execute();
-$result = $stmt->get_result();
+    $email = $_SESSION['email'];
+
+    // Consulta para obtener los datos del bebé
+    $query_bebes = "SELECT * FROM bebes WHERE email = ?";
+    $stmt_bebes = $conn->prepare($query_bebes);
+    $stmt_bebes->bind_param('s', $email);
+    $stmt_bebes->execute();
+    $result_bebes = $stmt_bebes->get_result();
+
+    // Consulta para obtener el nombre del padre
+    $query_padre = "SELECT nombres FROM padres WHERE email = ?";
+    $stmt_padre = $conn->prepare($query_padre);
+    $stmt_padre->bind_param('s', $email);
+    $stmt_padre->execute();
+    $result_padre = $stmt_padre->get_result();
+    $padre = $result_padre->fetch_assoc();
+    $nombre_padre = $padre['nombres'];
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -285,34 +298,20 @@ $result = $stmt->get_result();
     </script>
 </head>
 <body>
-    <?php
-    session_start();
-    if ($_SESSION['role'] !== 'padre') {
-        header("Location: iniciar_sesion.html");
-        exit();
-    }
-
-    require 'conexion.php'; // Asegúrate de que la conexión a la base de datos esté correcta.
-
-    $email = $_SESSION['email'];
-    $query = "SELECT * FROM bebes WHERE email = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    ?>
     <div class="sidebar">
         <div class="profile-section">
             <div class="profile-header">
                 <img src="babyChat.png" alt="Imagen de BabyChat">
             </div>
+            <!-- Botón que muestra el nombre del padre -->
             <button id="newChatBtn">+ Nuevo chat</button>
+            
             <div class="profile-info">
                 <form>
                     <label for="bebes">Selecciona a tu bebé:</label>
                     <select id="bebes" name="bebes">
                         <?php
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = $result_bebes->fetch_assoc()) {
                             echo "<option value='{$row['id_bebe']}'>{$row['nombres']}</option>";
                         }
                         ?>
@@ -324,12 +323,22 @@ $result = $stmt->get_result();
         <div class="main-options">
             <h2>Principal</h2>
             <ul>
-                <li><a id="trackBabyBtn" ><i class="fas fa-baby"></i> Seguimiento</a></li>
-                <li><a id="vacunasBabyBtn"><i class="fas fa-syringe"></i> Vacunación</a></li>
+                <a id="trackBabyBtn" class="fas fa-baby" href="seguimiento.php"> Seguimiento</a>
+            </ul>
+            <ul>
+                <a id="vacunasBabyBtn" class="fas fa-syringe" href="vacunacion.php"> Vacunación</a>
             </ul>
         </div>
-        <form id="logoutForm" action="cerrar_sesion.php" method="POST" style="display:none;"></form>
-        <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
+        <div>
+            <div>
+                <button id="viewFatherModalBtn"><?php echo htmlspecialchars($nombre_padre); ?></button>
+            </div>
+            <div>
+                <form id="logoutForm" action="cerrar_sesion.php" method="POST" style="display:none;"></form>
+                <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
+            </div>
+        </div>
+        
     </div>
 
     <div id="registerBabyModal" class="modal">
@@ -339,12 +348,18 @@ $result = $stmt->get_result();
     </div>
     <div id="trackingBabyModal" class="modal">
         <div class="modal-content">
-            <iframe src="seguimiento.html" style="width: 100%; height: 800px; border: none;"></iframe>
+        <iframe src="seguimiento.php?id_bebe=<?php echo $selected_bebe_id; ?>" style="width: 100%; height: 800px; border: none;"></iframe>
+
         </div>
     </div>
     <div id="vacunasBabyModal" class="modal">
         <div class="modal-content">
-            <iframe src="vacunacion.html" style="width: 100%; height: 800px; border: none;"></iframe>
+            <iframe src="vacunacion.php" style="width: 100%; height: 800px; border: none;"></iframe>
+        </div>
+    </div>
+    <div id="viewFatherModal" class="modal">
+        <div class="modal-content">
+            <iframe src="vista_perfil2.php" style="width: 100%; height: 800px; border: none;"></iframe>
         </div>
     </div>
 
@@ -354,7 +369,7 @@ $result = $stmt->get_result();
             <script type="module">
                 import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
                 Chatbot.initFull({
-                    chatflowid: "a75cd168-9771-4282-a32a-c5a12adfb92f",
+                    chatflowid: "19c01520-1822-417f-b9ec-d5950b77b4aa",
                     apiHost: "http://localhost:3000",
                     theme: {
                         chatWindow: {
@@ -431,10 +446,11 @@ $result = $stmt->get_result();
         });
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById("trackingBabyModal");
-        const addBabyBtn = document.getElementById("trackBabyBtn");
+        const modal = document.getElementById("viewFatherModal");
+        const addBabyBtn = document.getElementById("viewFatherModalBtn");
 
         addBabyBtn.onclick = function() {
             modal.style.display = "block";
@@ -454,28 +470,6 @@ $result = $stmt->get_result();
         });
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById("vacunasBabyModal");
-        const addBabyBtn = document.getElementById("vacunasBabyBtn");
 
-        addBabyBtn.onclick = function() {
-            modal.style.display = "block";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Escuchar mensajes del iframe
-        window.addEventListener('message', function(event) {
-            if (event.data === 'closeModal') {
-                modal.style.display = "none";
-            }
-        });
-        });
-    </script>
 </body>
 </html>

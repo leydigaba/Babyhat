@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot de Pediatría</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #sidebar {
+            width: 25%;
+            background-color: #2c2c2e;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            border-right: 1px solid #3a3a3c;
+        }
+
+        #sidebar div {
+            padding: 15px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            background-color: #3a3a3c;
+            cursor: pointer;
+        }
+
+        #chatbox {
+            width: 75%;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        #messages {
+            height: 80%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #0a84ff;
+            color: white;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #2c2c2e;
+            color: white;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        #userInput {
+            width: calc(100% - 100px);
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            background-color: #2c2c2e;
+            color: #ffffff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button {
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: none;
+            background-color: #0a84ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #007aff;
+        }
+
+        /* CSS Variables for dark and light modes */
+        body.dark-mode {
+            --chatbox-bg-color: #000000;
+            --bot-message-bg-color: #2c2c2e;
+            --bot-message-text-color: #ffffff;
+            --input-bg-color: #2c2c2e;
+            --input-text-color: #ffffff;
+        }
+
+        body.light-mode {
+            --chatbox-bg-color: #ffffff;
+            --bot-message-bg-color: #e5e5ea;
+            --bot-message-text-color: #000000;
+            --input-bg-color: #f0f0f5;
+            --input-text-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div>Eddy</div>
+        <div>Papá</div>
+        <div>Prima Roxana Villegas</div>
+        <div>Apple</div>
+        <div>Elsy Yoarib Yañez</div>
+        <!-- Puedes añadir más contactos aquí -->
+    </div>
+
+    <div id="chatbox">
+        <div id="messages"></div>
+        <input type="text" id="userInput" placeholder="Escribe tu pregunta aquí...">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <script>
+        // Function to detect the system's theme and apply it
+        function applyTheme() {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            console.log(`Prefiere modo oscuro: ${prefersDarkScheme}`);
+            if (prefersDarkScheme) {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+            } else {
+                document.body.classList.add('light-mode');
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // Apply theme on page load
+        window.onload = function() {
+            applyTheme();
+        };
+
+        // Listen for changes in the system theme
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+
+        // Function to send a message
+        function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            if (userInput) {
+                const messagesDiv = document.getElementById("messages");
+
+                const userMessage = document.createElement("div");
+                userMessage.className = "message user-message";
+                userMessage.innerHTML = `${userInput}`;
+                messagesDiv.appendChild(userMessage);
+
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: userInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const botMessage = document.createElement("div");
+                    botMessage.className = "message bot-message";
+                    botMessage.innerHTML = `${data.answer}`;
+                    messagesDiv.appendChild(botMessage);
+                })
+                .catch(error => console.error('Error:', error));
+
+                document.getElementById("userInput").value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot de Pediatría</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: stretch;
+            height: 100vh;
+            background-color: #1c1c1e;
+            color: #ffffff;
+        }
+
+        /* Side Menu */
+        #sideMenu {
+            width: 250px;
+            background-color: #2c2c2e;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #sideMenu a {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 10px 0;
+            font-size: 18px;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #sideMenu a:hover {
+            background-color: #3a3a3c;
+            border-radius: 10px;
+            padding-left: 10px;
+            transition: all 0.3s;
+        }
+
+        /* Chatbox */
+        #chatbox {
+            flex-grow: 1;
+            background-color: #000000;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            overflow-y: hidden;
+        }
+
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #0a84ff;
+            color: white;
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 70%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #2c2c2e;
+            color: white;
+            padding: 10px;
+            border-radius: 20px;
+            max-width: 70%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #userInput {
+            width: calc(100% - 100px);
+            padding: 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #2c2c2e;
+            color: white;
+        }
+
+        button {
+            padding: 15px 18px;
+            border-radius: 20px;
+            border: none;
+            background-color: #0a84ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #007aff;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Menú lateral estático -->
+    <div id="sideMenu">
+        <a href="#"><img src="path-to-your-icon" alt="icon" /> ChatGPT</a>
+        <a href="#"><img src="path-to-your-icon" alt="icon" /> Explorar GPTs</a>
+        <a href="#"><img src="path-to-your-icon" alt="icon" /> Configuración</a>
+        <a href="#"><img src="path-to-your-icon" alt="icon" /> Cerrar sesión</a>
+    </div>
+    <!-- Chatbot -->
+    <div id="chatbox">
+        <div id="messages"></div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="userInput" placeholder="Escribe tu pregunta aquí...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to send a message
+        function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            if (userInput) {
+                const messagesDiv = document.getElementById("messages");
+
+                const userMessage = document.createElement("div");
+                userMessage.className = "message user-message";
+                userMessage.innerHTML = `${userInput}`;
+                messagesDiv.appendChild(userMessage);
+
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: userInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const botMessage = document.createElement("div");
+                    botMessage.className = "message bot-message";
+                    botMessage.innerHTML = `${data.answer}`;
+                    messagesDiv.appendChild(botMessage);
+                })
+                .catch(error => console.error('Error:', error));
+
+                document.getElementById("userInput").value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

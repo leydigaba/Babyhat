@@ -26,6 +26,7 @@ $padre = $result_padre->fetch_assoc();
 $nombre_padre = $padre['nombres'];
 ?>
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -345,12 +346,13 @@ $nombre_padre = $padre['nombres'];
     </div>
     <div id="trackingBabyModal" class="modal">
         <div class="modal-content">
-            <iframe src="seguimiento.html" style="width: 100%; height: 800px; border: none;"></iframe>
+        <iframe src="seguimiento.php?id_bebe=<?php echo $selected_bebe_id; ?>" style="width: 100%; height: 800px; border: none;"></iframe>
+
         </div>
     </div>
     <div id="vacunasBabyModal" class="modal">
         <div class="modal-content">
-            <iframe src="vacunacion.html" style="width: 100%; height: 800px; border: none;"></iframe>
+            <iframe src="vacunacion.php" style="width: 100%; height: 800px; border: none;"></iframe>
         </div>
     </div>
     <div id="viewFatherModal" class="modal">
@@ -358,66 +360,12 @@ $nombre_padre = $padre['nombres'];
             <iframe src="vista_perfil2.php" style="width: 100%; height: 800px; border: none;"></iframe>
         </div>
     </div>
-
-    <div class="main-content">
-        <div class="chat-container">
-            <flowise-fullchatbot></flowise-fullchatbot>
-            <script type="module">
-                import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
-                Chatbot.initFull({
-                    chatflowid: "a75cd168-9771-4282-a32a-c5a12adfb92f",
-                    apiHost: "http://localhost:3000",
-                    theme: {
-                        chatWindow: {
-                            showTitle: true,
-                            title: 'babyChatbot',
-                            titleAvatarSrc: 'https://cdn3d.iconscout.com/3d/premium/thumb/messages-9237526-7590409.png?f=webp',
-                            showAgentMessages: false,
-                            welcomeMessage: '¡Hola! ¿Cómo puedo ayudarte hoy?',
-                            errorMessage: 'Ha sucedido un error, intenta nuevamente. Nos disculpamos por los inconvenientes.',
-                            backgroundColor: "#ddd",
-                            fontSize: 16,
-                            poweredByTextColor: "#515c6d",
-                            botMessage: {
-                                backgroundColor: "#FFFFFF",
-                                textColor: "#00000",
-                                showAvatar: true,
-                                avatarSrc: "https://media.istockphoto.com/id/1073043572/vector/robot-icon-bot-sign-design-chatbot-symbol-concept-voice-support-service-bot-online-support.jpg?s=612x612&w=0&k=20&c=IpqF1oBpILXVKmCPj63IftCxgDzNcTe7bvWnd-wSapw=",
-                            },
-                            userMessage: {
-                                backgroundColor: "#1330BE",
-                                textColor: "#FFFEF9",
-                                showAvatar: true,
-                                avatarSrc: "https://raw.githubusercontent.com/zahidkhawaja/langchain-chat-nextjs/main/public/usericon.png",
-                            },
-                            textInput: {
-                                placeholder: 'Escribe tu pregunta...',
-                                backgroundColor: '#FFFFF',
-                                textColor: '#303235',
-                                sendButtonColor: '#1330BE',
-                                maxChars: 150,
-                                maxCharsWarningMessage: 'Has excedido el límite de caracteres. Por favor, introduzca menos de 150 caracteres.',
-                                autoFocus: true,
-                                sendMessageSound: true,
-                                sendSoundLocation: "enviar.mp3",
-                                receiveMessageSound: true,
-                                receiveSoundLocation: "recibir.mp3",
-                            },
-                            feedback: {
-                                color: '#FFFEF9',
-                            },
-                            footer: {
-                                textColor: '#303235',
-                                text: 'BabyChat puede producir información inexacta, los chats serán monitoreados por personas que supervisan las respuestas para mejorar su efectividad. Generado por Llama 3.1 de Meta, proporcionado por Ollama.',
-                                company: 'Privacy Notice>',
-                                companyLink: 'privacidad.html',
-                            }
-                        }
-                    }
-                })
-            </script>
+    <div id="newChatModal" class="modal">
+        <div class="modal-content">
+            <iframe src="ollama_javascript/index2.html" style="width: 70%; height: 800px; border: none; margin-right: 0;"></iframe>
         </div>
     </div>
+//aqui va el html del chatbot
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -492,6 +440,29 @@ $nombre_padre = $padre['nombres'];
         document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById("vacunasBabyModal");
         const addBabyBtn = document.getElementById("vacunasBabyBtn");
+
+        addBabyBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Escuchar mensajes del iframe
+        window.addEventListener('message', function(event) {
+            if (event.data === 'closeModal') {
+                modal.style.display = "none";
+            }
+        });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById("newChatModal");
+        const addBabyBtn = document.getElementById("newChatBtn");
 
         addBabyBtn.onclick = function() {
             modal.style.display = "block";

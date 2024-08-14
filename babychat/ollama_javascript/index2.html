@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="groq_request.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 20px;
+            padding: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            background-color: #1c1c1e;
+            margin: 0;
+        }
+
+        .form-label {
+            color: #8e8e93;
+        }
+
+        .form-control {
+            border-radius: 20px;
+            border: 1px solid #3a3a3c;
+            background-color: #1c1c1e;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #0a84ff;
+            border-color: #0a84ff;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        #responses {
+            margin-top: 20px;
+        }
+
+        #responses p {
+            background-color: #2c2c2e;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: none;
+            color: #ffffff;
+            font-size: 16px;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+
+        #responses p.user-message {
+            background-color: #0a84ff;
+            color: #ffffff;
+            margin-left: auto;
+            text-align: right;
+            word-wrap: break-word; /* Permite que el texto se divida en varias líneas si es necesario */
+            display: inline-block; /* Hace que el tamaño del contenedor se ajuste al contenido */
+            margin-right: 0;
+            margin-left: auto;
+        }
+
+        form {
+            background-color: #1c1c1e;
+            padding: 15px;
+        }
+    </style>
+    <title>IA Generativa</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>BabyChat</h1>
+        <div id="responses">
+        </div>
+        <form name="datos">
+            <div class="mb-3">
+                <label for="prompt" class="form-label">Escribe tu consulta</label>
+                <input type="text" class="form-control" id="prompt" name="prompt" required placeholder="¿En qué puedo ayudarte hoy?">
+            </div>
+            <input type="button" class='btn btn-primary' onclick="send_request()" value="Consultar">
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

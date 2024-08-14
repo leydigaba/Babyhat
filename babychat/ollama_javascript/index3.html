@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Profesional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 0;
+            width: 600px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #e0e0e0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .chat-header img {
+            height: 80px;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 24px;
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message .message-content {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 10px;
+            max-width: 75%;
+            margin-left: 10px;
+        }
+
+        .message.user .message-content {
+            background-color: #007bff;
+            color: #fff;
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding: 15px;
+            background-color: #ffffff;
+        }
+
+        .chat-input-container input {
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            color: #333;
+            flex-grow: 1;
+            margin-right: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input-container input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .chat-input-container button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-input-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .faq-list {
+            list-style: none;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .faq-list li {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .faq-list li a {
+            color: #007bff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .faq-list li a i {
+            margin-right: 10px;
+            font-size: 24px;
+            vertical-align: middle;
+        }
+
+        .faq-list li a:hover {
+            color: #0056b3;
+        }
+
+        .privacy-notice {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* Modo oscuro */
+        .dark-mode {
+            background-color: #2c2f33;
+            color: #f2f2f2;
+        }
+
+        .dark-mode .chat-container {
+            background-color: #23272a;
+        }
+
+        .dark-mode .message .message-content {
+            background-color: #2c2f33;
+        }
+
+        .dark-mode .message.user .message-content {
+            background-color: #7289da;
+        }
+
+        .dark-mode .chat-input-container input {
+            background-color: #2c2f33;
+            color: #f2f2f2;
+            border-color: #444;
+        }
+
+        .dark-mode .chat-input-container input:focus {
+            border-color: #7289da;
+        }
+
+        .dark-mode .chat-input-container button {
+            background-color: #7289da;
+        }
+
+        .dark-mode .chat-input-container button:hover {
+            background-color: #5b6eae;
+        }
+
+        .dark-mode .privacy-notice {
+            color: #999;
+        }
+
+        .dark-mode .theme-toggle {
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="babyChat.png" alt="BabyChat Logo">
+            <h1>Hola, pregunta todas tus dudas!</h1>
+            <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></div>
+        </div>
+
+        <div class="messages-container" id="responses"></div>
+
+        <ul class="faq-list" id="faq-list">
+            <li><a href="#" onclick="sendMessage('¿Cómo cambio un pañal?')"><i class="fa fa-question-circle"></i> ¿Cómo cambio un pañal?</a></li>
+            <li><a href="#" onclick="sendMessage('Utensilios de viaje y pañalera')"><i class="fa fa-shopping-cart"></i> Utensilios de viaje y pañalera</a></li>
+            <li><a href="#" onclick="sendMessage('Posiciones para amamantar')"><i class="fa fa-search"></i> Posiciones para amamantar</a></li>
+            <li><a href="#" onclick="sendMessage('Sacar el aire a mi bebé')"><i class="fa fa-baby"></i> Sacar el aire a mi bebé</a></li>
+            <li><a href="#" onclick="sendMessage('¿Es correcto usar un monitor de bebé?')"><i class="fa fa-video"></i> ¿Es correcto usar un monitor de bebé?</a></li>
+        </ul>
+
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" class="form-control" name="prompt" required placeholder="Escribe todo lo que necesites preguntarme...">
+            <button onclick="send_request()">Enviar</button>
+        </div>
+
+        <div class="privacy-notice">BabyChat puede producir información inexacta, los chats serán monitoreados por personas que supervisan las respuestas para mejorar su efectividad. <a href="privacidad.html">Privacy Notice</a></div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeToggle = document.querySelector('.theme-toggle i');
+            themeToggle.classList.toggle('fa-moon');
+            themeToggle.classList.toggle('fa-sun');
+        }
+
+
+
+        function submitMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const responses = document.getElementById('responses');
+            const faqList = document.getElementById('faq-list');
+
+            if (chatInput.value.trim() === '') return;
+
+            // Ocultar la lista de preguntas sugeridas
+            faqList.style.display = 'none';
+
+            // Crear el mensaje del usuario
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.innerHTML = <div class="message-content">${chatInput.value}</div>;
+            responses.appendChild(userMessage);
+
+            // Crear la respuesta automática
+            const botMessage = document.createElement('div');
+            botMessage.className = 'message';
+            botMessage.innerHTML = <div class="message-content">Respuesta automática: ${chatInput.value}</div>;
+            responses.appendChild(botMessage);
+        }
+
+        function send_request() {
+        // Leer valores del formulario "datos"
+        var prompt = document.forms.datos.prompt.value;
+
+        const PAYLOAD = {
+            model:"llama3.1",
+            prompt: prompt,
+            stream:false
+        };
+
+        const URL = "http://localhost:11434/api/generate";
+
+        // Crea un objeto XMLHttpRequest para realizar solicitudes
+        var request = new XMLHttpRequest();
+
+        // Abre una conexión asíncrona
+        request.open('POST', URL , true);
+        // Configura los Headers
+        request.setRequestHeader("Accept", "application/json");
+        request.setRequestHeader("Content-Type", "application/json");
+
+        // Envía la petición con los datos
+        request.send(JSON.stringify(PAYLOAD));
+
+        // Se ejecuta cuando la respuesta está lista
+        request.onload = () => {
+            // Valida el status de la respuesta
+            if (request.status === 200) {
+                // Almacena la respuesta del request
+                const response = request.responseText;
+
+                // Lo formatea a JSON
+                const json = JSON.parse(response);
+
+                // Lo imprime en la consola para verificar la respuesta
+                console.log("response: " + response);
+                console.log("json: " + json);
+                //Crea un tag <p></p> para insertar la respuesta del prompt
+                const responses = document.getElementById("responses");
+                var p = document.createElement("p");
+
+                // Toma de la respuesta solamente el elemento response
+                p.innerHTML = json.response;
+
+                // Lo agrega al <div> responses
+                responses.appendChild(p);
+                responses.scrollTop = responses.scrollHeight; // Desplazarse hacia abajo
+
+                chatInput.value = ''; // Limpiar el campo de entrada después de enviar
+            }else{
+                alert("Fallo en la conexión con el servidor");
+            }
+        };
+    };
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+</html>
